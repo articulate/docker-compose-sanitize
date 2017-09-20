@@ -1,12 +1,13 @@
 require 'json'
 require 'yaml'
 
-universal_options = ["volumes"]
+UNIVERSAL_OPTIONS = ["volumes"]
 sanitize_options = Hash.new {|h,k| h[k]=[]}
 
 CONFIG_FILE = './docker-compose.yml'
 
 config = YAML.load_file(CONFIG_FILE)
+
 config['services'].each do |k, v|
   universal_options.each do |x|
     sanitize_options[k] << x
