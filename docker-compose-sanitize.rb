@@ -1,18 +1,11 @@
 require 'json'
 require 'yaml'
 
-UNIVERSAL_OPTIONS = ["volumes"]
 sanitize_options = Hash.new {|h,k| h[k]=[]}
 
 CONFIG_FILE = './docker-compose.yml'
 
 config = YAML.load_file(CONFIG_FILE)
-
-config['services'].each do |k, v|
-  UNIVERSAL_OPTIONS.each do |x|
-    sanitize_options[k] << x
-  end
-end
 
 if File.exists?('./service.json')
   service_json = JSON.parse(File.read('./service.json'))
