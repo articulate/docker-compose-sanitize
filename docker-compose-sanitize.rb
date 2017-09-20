@@ -9,7 +9,7 @@ CONFIG_FILE = './docker-compose.yml'
 config = YAML.load_file(CONFIG_FILE)
 
 config['services'].each do |k, v|
-  universal_options.each do |x|
+  UNIVERSAL_OPTIONS.each do |x|
     sanitize_options[k] << x
   end
 end
