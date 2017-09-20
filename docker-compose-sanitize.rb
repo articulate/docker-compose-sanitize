@@ -1,15 +1,34 @@
+require 'json'
 require 'yaml'
+
+universal_options = ["volumes"]
+sanitize_options = Hash.new {|h,k| h[k]=[]}
 
 CONFIG_FILE = './docker-compose.yml'
 
+config = YAML.load_file(CONFIG_FILE)
+config['services'].each do |k, v|
+  universal_options.each do |x|
+    sanitize_options[k] << x
+  end
+end
+
+if File.exists?('./service.json')
+  JSON.parse(File.read('./service.json'))["docker_compose_sanitize"].each do |k, v|
+    v.each do |z|
+      sanitize_options[k] << z
+    end
+  end
+else
+  puts "No service.json file detected"
+end
+
 puts 'Sanitizing service options...'
 
-config = YAML.load_file(CONFIG_FILE)
-config['services'] = config['services'].each_with_object({}) do |(key, value), memo|
-  memo[key] = value.reject do |k, v|
-    strip_option = ARGV.include?(k)
-    puts "stripping #{k} option from #{key} container" if strip_option
-    strip_option
+sanitize_options.each do |service, options|
+  options.each do |option|
+    puts "stripping #{option} option from #{service} container"
+    config["services"][service].delete(option)
   end
 end
 
