@@ -14,7 +14,7 @@ config['services'].each do |k, v|
 end
 
 if File.exists?('./service.json')
-  JSON.parse(File.read('./service.json'))["docker_compose_sanitize"].each do |k, v|
+  JSON.parse(File.read('./service.json'))["sanitize"].each do |k, v|
     v.each do |z|
       sanitize_options[k] << z
     end
