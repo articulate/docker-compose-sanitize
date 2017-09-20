@@ -15,9 +15,12 @@ config['services'].each do |k, v|
 end
 
 if File.exists?('./service.json')
-  JSON.parse(File.read('./service.json'))["sanitize"].each do |k, v|
-    v.each do |z|
-      sanitize_options[k] << z
+  service_json = JSON.parse(File.read('./service.json'))
+  if service_json.has_key?("sanitize")
+    service_json["sanitize"].each do |k, v|
+      v.each do |z|
+        sanitize_options[k] << z
+      end
     end
   end
 else
