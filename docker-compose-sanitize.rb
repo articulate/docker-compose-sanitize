@@ -19,6 +19,7 @@ if File.exists?('./service.json')
   end
 else
   puts "No service.json file detected"
+  exit 0
 end
 
 puts 'Sanitizing service options...'
