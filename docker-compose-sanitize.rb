@@ -10,6 +10,16 @@ config = YAML.load_file(CONFIG_FILE)
 
 if File.exists?('./service.json')
   service_json = JSON.parse(File.read('./service.json'))
+
+  if service_json.has_key?('strip_volumes') and service_json['strip_volumes']
+    # remove named volumes
+    config.delete('volumes')
+    # remove volumes from all containers
+    config['services'].each do |service, options|
+      options.delete('volumes')
+    end
+  end
+
   if service_json.has_key?("sanitize")
     service_json["sanitize"].each do |k, v|
       v.each do |z|
